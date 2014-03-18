@@ -23,12 +23,8 @@ module OnFailureDoThis
     end
   end
 
-  def notify(action, notifying_resource, arguments = {})
-    the_resource = run_context.resource_collection.find(notifying_resource)
-    arguments.each do |arg, value|
-      the_resource.send(arg, value)
-    end
-    the_resource.run_action(action)
+  def notify(action, notifying_resource)
+    run_context.resource_collection.find(notifying_resource).run_action(action)
   end
 
   def self.included(base)
