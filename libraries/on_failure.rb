@@ -1,14 +1,26 @@
 module OnFailureDoThis
   def run_action_rescued(action = nil)
-    #Chef::Log.info "This new run_action: #{new_resource.enclosing_provider.inspect}"
     run_action_unrescued(action)
   rescue Exception => e
     Chef::Log.info "Rescuing exception: #{e.inspect}"
-    if new_resource.instance_variable_defined?('@on_failure_struct'.to_sym)
+    if new_resource.instance_variable_defined?('@on_failure_struct'.to_sym) &&
+      (new_resource.on_failure_struct.exceptions.any? { |klass| e.is_a?(klass) } ||
+       new_resource.on_failure_struct.exceptions.empty?)
+      #Chef::Log.info "This new run_action: #{new_resource.on_failure_struct.inspect}"
       Chef::Log.info "On failure defined. Perfomring requested tasks before raising the exception"
       instance_exec(new_resource, &new_resource.on_failure_struct.block)
+      if new_resource.on_failure_struct.options[:retries] > 0
+        new_resource.on_failure_struct.options[:retries] -= 1
+        Chef::Log.info "Retrying the resource action"
+        retry
+      else
+        Chef::Log.info "Damn.. done with retries, re-raising..."
+        raise e
+      end
+    else
+      Chef::Log.info "Oops. my fault. I shouldn't have rescued, re-raising..."
+      raise e
     end
-    raise e
   end
 
   def notify(action, notifying_resource)
@@ -33,10 +45,14 @@ class Chef::Resource
 
   attr_accessor :on_failure_struct
 
-  def on_failure(args = nil, &block)
+  def on_failure(*args, &block)
     #Chef::Log.info "On failure called with options: #{args.inspect} and a block: #{block.inspect}"
-    options = args if args.is_a?(Hash)
-    exceptions = args if args.is_a?(Array)
+    options = {:retries => 1}
+    exceptions = []
+    args.each do |arg|
+      exceptions << arg if arg.is_a?(Class)
+      options.merge!(arg) if arg.is_a?(Hash)
+    end
     self.instance_variable_set("@on_failure_struct".to_sym, OnFailure.new(options || {}, exceptions || [], block))
   end
 end
