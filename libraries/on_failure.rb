@@ -1,6 +1,6 @@
 module OnFailureDoThis
   def run_action_rescued(action = nil)
-    Chef::Log.info "This new run_action: #{new_resource.on_failure_struct.inspect}"
+    #Chef::Log.info "This new run_action: #{new_resource.enclosing_provider.inspect}"
     run_action_unrescued(action)
   rescue Exception => e
     Chef::Log.info "Rescuing exception: #{e.inspect}"
@@ -16,7 +16,6 @@ module OnFailureDoThis
   end
 
   def self.included(base)
-    Chef::Log.info "On Failure Included to #{base.inspect}"
     base.class_eval do
       alias_method :run_action_unrescued, :run_action
       alias_method :run_action, :run_action_rescued
@@ -35,7 +34,7 @@ class Chef::Resource
   attr_accessor :on_failure_struct
 
   def on_failure(args = nil, &block)
-    Chef::Log.info "On failure called with options: #{args.inspect} and a block: #{block.inspect}"
+    #Chef::Log.info "On failure called with options: #{args.inspect} and a block: #{block.inspect}"
     options = args if args.is_a?(Hash)
     exceptions = args if args.is_a?(Array)
     self.instance_variable_set("@on_failure_struct".to_sym, OnFailure.new(options || {}, exceptions || [], block))
