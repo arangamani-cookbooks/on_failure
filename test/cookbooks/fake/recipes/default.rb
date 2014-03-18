@@ -12,8 +12,13 @@
 
 filesystem 'test' do
   action :freeze
-  on_failure(ArgumentError) { notify :write, 'log[notified_resource]' }
+  on_failure(RuntimeError) { notify :write, 'log[notified_resource]', :message => 'See... The message is changed.'}
 end
+
+#filesystem 'test' do
+#  action :freeze
+#  on_failure(ArgumentError) { notify :write, 'log[notified_resource]' }
+#end
 
 log 'notified_resource' do
   message 'See... I am notified because of your damn mistake'

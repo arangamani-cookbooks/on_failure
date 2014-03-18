@@ -1,0 +1,39 @@
+diff --git a/libraries/on_failure.rb b/libraries/on_failure.rb
+index f72f938..a4c9efc 100644
+--- a/libraries/on_failure.rb
++++ b/libraries/on_failure.rb
+@@ -23,8 +23,12 @@ module OnFailureDoThis
+     end
+   end
+
+-  def notify(action, notifying_resource)
+-    run_context.resource_collection.find(notifying_resource).run_action(action)
++  def notify(action, notifying_resource, arguments = {})
++    the_resource = run_context.resource_collection.find(notifying_resource)
++    arguments.each do |arg, value|
++      the_resource.send(arg, value)
++    end
++    the_resource.run_action(action)
+   end
+
+   def self.included(base)
+diff --git a/test/cookbooks/fake/recipes/default.rb b/test/cookbooks/fake/recipes/default.rb
+index cc12f70..b21bfb4 100644
+--- a/test/cookbooks/fake/recipes/default.rb
++++ b/test/cookbooks/fake/recipes/default.rb
+@@ -12,9 +12,14 @@
+
+ filesystem 'test' do
+   action :freeze
+-  on_failure(ArgumentError) { notify :write, 'log[notified_resource]' }
++  on_failure(RuntimeError) { notify :write, 'log[notified_resource]', :message => 'See... The message is changed.'}
+ end
+
++#filesystem 'test' do
++#  action :freeze
++#  on_failure(ArgumentError) { notify :write, 'log[notified_resource]' }
++#end
++
+ log 'notified_resource' do
+   message 'See... I am notified because of your damn mistake'
+   level :info
