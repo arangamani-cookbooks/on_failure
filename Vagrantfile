@@ -60,6 +60,8 @@ Vagrant.configure("2") do |config|
   # option to your ~/.vagrant.d/Vagrantfile file
   config.berkshelf.enabled = true
 
+  config.omnibus.chef_version = :latest
+
   # An array of symbols representing groups of cookbook described in the Vagrantfile
   # to exclusively install and copy to Vagrant's shelf.
   # config.berkshelf.only = []
