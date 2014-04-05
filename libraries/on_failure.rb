@@ -5,24 +5,24 @@ module OnFailureDoThis
     Chef::Log.info "Rescuing exception: #{e.inspect}"
     if new_resource.instance_variable_defined?('@on_failure_handlers'.to_sym)
       #Chef::Log.info "This new run_action: #{new_resource.on_failure_handlers.inspect}"
+      #on_failure_struct = new_resource.on_failure_handlers.first
       new_resource.on_failure_handlers.each do |on_failure_struct|
         #Chef::Log.info "This new run_action particular handler: #{on_failure_struct.inspect}"
         if (on_failure_struct.exceptions.any? { |klass| e.is_a?(klass) } ||
             on_failure_struct.exceptions.empty?)
           Chef::Log.info "On failure defined. Perfomring requested tasks before raising the exception"
-          # TODO: This should probably go inside the if block
-          instance_exec(new_resource, &on_failure_struct.block)
           if on_failure_struct.options[:retries] > 0
             on_failure_struct.options[:retries] -= 1
+            instance_exec(new_resource, &on_failure_struct.block)
             Chef::Log.info "Retrying the resource action"
-            retry
+            #retry
+            run_action_rescued(action)
           end
         end
       end
-    else
-      Chef::Log.info "Nah, re-raising..."
-      raise e
     end
+    Chef::Log.info "Nah, re-raising..."
+    raise e
   end
 
   def notify(action, notifying_resource)

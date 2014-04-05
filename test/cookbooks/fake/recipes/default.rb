@@ -13,7 +13,7 @@
 filesystem 'test' do
   action :freeze
   on_failure(RuntimeError) { notify :write, 'log[notified_resource]' }
-  #on_failure(RuntimeError, :retries => 4) { notify :write, 'log[another_notified_resource]' }
+  on_failure(RuntimeError, :retries => 4) { notify :write, 'log[another_notified_resource]' }
 end
 
 log 'notified_resource' do
