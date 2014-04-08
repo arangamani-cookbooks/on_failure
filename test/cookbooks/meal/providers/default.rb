@@ -1,6 +1,5 @@
 action :eat do
   Chef::Log.debug "Going to eat breakfast. Currently ate: #{node['meal']['items'].inspect}"
-  # TODO: delete this debug statements
   Chef::Log.debug "Meal attributes: #{node['meal'].inspect}"
   raise UncookedError, 'Meal is not cooked well' unless node['meal']['cooked']
   raise ColdError, 'Meal is cold' if node['meal']['cold']

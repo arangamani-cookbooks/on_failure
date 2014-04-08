@@ -1,4 +1,6 @@
+# Simulate that meal is not cooked so UncookedError is raised
 node.set['meal']['cooked'] = false
+# Simulate that meal is cold so ColdError is raised
 node.set['meal']['cold'] = true
 
 meal 'breakfast' do
