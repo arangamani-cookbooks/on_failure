@@ -1,6 +1,6 @@
-name             'bacon'
+name             'food'
 maintainer       'Kannan Manickam'
 maintainer_email 'me@arangamani.net'
 license          'Apache 2.0'
-description      'Used for frying food, eating food, etc.'
+description      'Provides a resource for frying food, eating food, etc.'
 version          '0.1.0'

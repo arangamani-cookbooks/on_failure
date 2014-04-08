@@ -1,6 +1,9 @@
 site :opscode
 
-cookbook 'food', path: './test/cookbooks/food'
-cookbook 'meal', path: './test/cookbooks/meal'
-cookbook 'fake', path: './test/cookbooks/fake'
 metadata
+
+group :test do
+  cookbook 'food', path: './test/cookbooks/food'
+  cookbook 'meal', path: './test/cookbooks/meal'
+  cookbook 'sample', path: './test/cookbooks/sample'
+end

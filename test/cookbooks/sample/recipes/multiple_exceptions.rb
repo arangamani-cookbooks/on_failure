@@ -1,7 +1,7 @@
 #
 # Author:: Kannan Manickam <me@arangamani.net>
-# Cookbook Name:: meal
-# Library:: exceptions
+# Cookbook Name:: sample
+# Recipe:: multiple_exceptions
 #
 # Copyright (C) 2014 Kannan Manickam
 #
@@ -18,13 +18,13 @@
 # limitations under the License.
 #
 
-module MealExceptions
-  class UncookedError < RuntimeError; end
+# Simlate that the meal is not cooked so UncookedError is raised
+node.set['meal']['cooked'] = false
 
-  class ColdError < RuntimeError; end
-
-  class HungryError < RuntimeError; end
+meal 'breakfast' do
+  on_failure(UncookedError, HungryError, retries: 3) { notify :fry, 'food[bacon]' }
 end
 
-::Chef::Provider.send(:include, MealExceptions)
-::Chef::Recipe.send(:include, MealExceptions)
+food 'bacon' do
+  action :nothing
+end

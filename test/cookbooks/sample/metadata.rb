@@ -1,8 +1,8 @@
-name             'fake'
+name             'sample'
 maintainer       'Kannan Manickam'
 maintainer_email 'me@arangamani.net'
 license          'Apache 2.0'
-description      'Installs/Configures on_failure'
+description      'A sample cookbook to test the on_failure cookbook functionality'
 version          '0.1.0'
 
 depends 'food'
