@@ -81,7 +81,9 @@ Vagrant.configure("2") do |config|
 
     chef.run_list = [
         "recipe[on_failure::default]",
-        "recipe[fake::default]"
+        "recipe[fake::multiple_blocks]"
     ]
+
+    #chef.arguments = '--log_level debug'
   end
 end
