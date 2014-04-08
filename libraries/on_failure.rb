@@ -1,19 +1,19 @@
 module OnFailureDoThis
   def run_action_rescued(action = nil)
     run_action_unrescued(action)
+    Chef::Log.info "Finished running #{new_resource.resource_name}[#{new_resource.name}] -- so no exception"
   rescue Exception => e
     Chef::Log.info "Rescuing exception: #{e.inspect}"
     if new_resource.instance_variable_defined?('@on_failure_handlers'.to_sym)
       new_resource.on_failure_handlers.each do |on_failure_struct|
-        if (on_failure_struct.exceptions.any? { |klass| e.is_a?(klass) } ||
-            on_failure_struct.exceptions.empty?)
-          Chef::Log.info "On failure defined. Perfomring requested tasks before raising the exception"
-          if on_failure_struct.options[:retries] > 0
-            on_failure_struct.options[:retries] -= 1
-            instance_exec(new_resource, &on_failure_struct.block)
-            Chef::Log.info "Retrying the resource action"
-            run_action_rescued(action)
-          end
+        if on_failure_struct.options[:retries] > 0 &&
+          (on_failure_struct.exceptions.any? { |klass| e.is_a?(klass) } || on_failure_struct.exceptions.empty?)
+          on_failure_struct.options[:retries] -= 1
+          Chef::Log.info "Executing the block"
+          instance_exec(new_resource, &on_failure_struct.block)
+          Chef::Log.info "Retrying the resource action"
+          run_action_rescued(action)
+          return
         end
       end
     end

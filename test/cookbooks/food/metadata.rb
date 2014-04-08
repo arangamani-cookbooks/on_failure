@@ -1,9 +1,6 @@
-name             'fake'
+name             'bacon'
 maintainer       'Kannan Manickam'
 maintainer_email 'me@arangamani.net'
 license          'Apache 2.0'
-description      'Installs/Configures on_failure'
+description      'Used for frying food, eating food, etc.'
 version          '0.1.0'
-
-depends 'food'
-depends 'meal'

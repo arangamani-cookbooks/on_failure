@@ -1,14 +1,3 @@
-#node.override['meal']['bacon_required'] = 1
-node.override['meal']['cooked'] = false
-
-meal 'breakfast' do
-  on_failure(ColdError, retries: 3) { notify :eat, 'food[bacon]' }
-end
-
-food 'bacon' do
-  action :nothing
-end
-
 #execute 'simple execute resource' do
   #command 'exit 1'
   #on_failure(:retries => 3) { |the_resource| Chef::Log.info "The failed command: #{the_resource.command}"}
@@ -21,8 +10,20 @@ end
   #action :run
 #end
 
+filesystem 'test' do
+  action :freeze
+  on_failure(RuntimeError) { notify :write, 'log[notified_resource]' }
+  on_failure(RuntimeError, :retries => 4) { notify :write, 'log[another_notified_resource]' }
+end
+
 log 'notified_resource' do
   message 'See... I am notified because of your damn mistake'
+  level :info
+  action :nothing
+end
+
+log 'another_notified_resource' do
+  message 'See.. This is also notified'
   level :info
   action :nothing
 end
