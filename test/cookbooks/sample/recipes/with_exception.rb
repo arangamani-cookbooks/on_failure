@@ -18,10 +18,11 @@
 # limitations under the License.
 #
 
+# At least 1 bacon slice is required to complete breakfast without getting hungry.
 node.override['meal']['bacon_required'] = 1
 
 meal 'breakfast' do
-  on_failure(RuntimeError) { notify :eat, 'food[bacon]' }
+  on_failure(HungryError) { notify :eat, 'food[bacon]' }
 end
 
 food 'bacon' do

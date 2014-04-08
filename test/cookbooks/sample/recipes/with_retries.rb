@@ -18,10 +18,11 @@
 # limitations under the License.
 #
 
+# 3 bacon slices are required for completing the breakfast without getting hungry. This is used to do retries.
 node.override['meal']['bacon_required'] = 3
 
 meal 'breakfast' do
-  on_failure(RuntimeError, retries: 5) { notify :eat, 'food[bacon]' }
+  on_failure(retries: 5) { notify :eat, 'food[bacon]' }
 end
 
 food 'bacon' do
