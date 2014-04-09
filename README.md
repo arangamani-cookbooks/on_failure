@@ -1,7 +1,13 @@
 # on_failure cookbook
 
+[![Cookbook Version](http://img.shields.io/github/release/arangamani-cookbooks/on_failure.svg)][release]
+[![Build Status](http://img.shields.io/travis/arangamani-cookbooks/on_failure.svg)][travis]
+
+[release]: http://github.com/arangamani-cookbooks/on_failure/releases
+[travis]: http://travis-ci.org/arangamani-cookbooks/on_failure
+
 This cookbook is a proof of concept for the proposed [on_failure Chef RFC]. This cookbook doesn't implement all
-possible features proposed but it covers all the basic use cases for the feature. There are still [discussions] going
+possible features proposed but it covers most use cases for the feature. There are still [discussions] going
 on in the proposal on how do certain things. This cookbook will help playing with the feature and proposing changes to
 the RFC.
 
