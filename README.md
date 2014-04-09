@@ -11,8 +11,11 @@ possible features proposed but it covers most use cases for the feature. There a
 on in the proposal on how do certain things. This cookbook will help playing with the feature and proposing changes to
 the RFC.
 
+Follow this [blog post] for seeing this in action.
+
 [on_failure Chef RFC]: https://github.com/opscode/chef-rfc/blob/sethvargo/on_failure/on_failure.md
 [discussions]: https://github.com/opscode/chef-rfc/pull/1
+[blog post]: http://blog.arangamani.net/blog/2014/04/08/chef-on-failure-handler/
 
 # Requirements
 
@@ -117,10 +120,6 @@ This cookbook has a `Vagrantfile` that can be used to provision a virtual machin
 
 The sample cookbook has recipes for each use cases explained in the Usage section. Just pick any recipe, put it in
 the runlist of the virtualmachine and provision it to see it in action.
-
-Follow this [blog post] for seeing this in action.
-
-[blog post]: http://blog.arangamani.net/blog/2014/04/08/chef-on-failure-handler/
 
 # Attributes
 
