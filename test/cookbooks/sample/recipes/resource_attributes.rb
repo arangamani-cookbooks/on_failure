@@ -1,7 +1,7 @@
 #
 # Author:: Kannan Manickam <me@arangamani.net>
-# Cookbook Name:: meal
-# Resource:: default
+# Cookbook Name:: sample
+# Recipe:: default
 #
 # Copyright (C) 2014 Kannan Manickam
 #
@@ -18,8 +18,11 @@
 # limitations under the License.
 #
 
-actions :eat
+# At least 1 bacon slice is required to complete breakfast without getting hungry.
+node.override['meal']['bacon_required'] = 1
 
-attribute :time, kind_of: [String, Time], default: Time.now
-
-default_action :eat
+# The handler block is just used to demonstrate that the resource attributes can be accessed.
+meal 'breakfast' do
+  time '2014-04-09 08:00:00 -0700'
+  on_failure { |breakfast| Chef::Log.info "Tried eating breakfast at: #{breakfast.time}" }
+end

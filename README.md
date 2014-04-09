@@ -83,6 +83,20 @@ meal 'breakfast' do
 end
 ```
 
+### Access to resource attributes
+
+The attributes of the resource can be accessed inside the block of `on_failure`. The following example demonstrates
+feature.
+
+```ruby
+meal 'breakfast' do
+  time '2014-04-09 08:00:00 -0700'
+  on_failure { |breakfast| Chef::Log.info "Tried eating breakfast at: #{breakfast.time}" }
+end
+```
+
+This handler simply logs the time specified in the resource.
+
 # Testing/Playing
 
 There are three cookbooks available in the `test/cookbooks` directory that will help playing with this resource.
@@ -100,7 +114,7 @@ the runlist of the virtualmachine and provision it to see it in action.
 
 Follow this [blog post] for seeing this in action.
 
-[blog post]: http://blog.arangamani.net/blog/link/goes/here
+[blog post]: http://blog.arangamani.net/blog/2014/04/08/chef-on-failure-handler/
 
 # Attributes
 
@@ -110,6 +124,22 @@ There are no attributes in this cookbook.
 
 There are no recipes in this cookbook.
 
-# Author
+# License & Author
 
 Author:: Kannan Manickam (<me@arangamani.net>)
+
+```
+Copyright (C) 2014 Kannan Manickam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+```

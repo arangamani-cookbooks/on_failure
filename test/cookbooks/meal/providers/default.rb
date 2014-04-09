@@ -19,7 +19,7 @@
 #
 
 action :eat do
-  Chef::Log.debug "Going to eat breakfast. Currently ate: #{node['meal']['items'].inspect}"
+  Chef::Log.debug "Going to eat breakfast at #{new_resource.time}. Currently ate: #{node['meal']['items'].inspect}"
   Chef::Log.debug "Meal attributes: #{node['meal'].inspect}"
 
   raise UncookedError, 'Meal is not cooked well' unless node['meal']['cooked']
@@ -28,9 +28,9 @@ action :eat do
   if node['meal']['bacon_required'] > 0 &&
     (node['meal']['items']['bacon'].nil? ||
     node['meal']['items']['bacon'] < node['meal']['bacon_required'])
-    raise HungryError, "I want #{node['meal']['bacon_required']} bacon slices." +
+    raise HungryError, "I want #{node['meal']['bacon_required']} bacon slice(s)." +
       " But I only ate: #{node['meal']['items']['bacon'] || 0}"
   end
-  Chef::Log.info "Meal '#{new_resource.name}' completed successfully."
+  Chef::Log.info "Meal '#{new_resource.name}' completed successfully at #{new_resource.time}."
   new_resource.updated_by_last_action(true)
 end

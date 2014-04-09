@@ -83,8 +83,9 @@ Vagrant.configure("2") do |config|
       "recipe[sample::default]",
       #"recipe[sample::with_exception]",
       #"recipe[sample::with_retries]",
-      #"recipe[sample::multiple_blocks]",
       #"recipe[sample::multiple_exceptions]",
+      #"recipe[sample::multiple_blocks]",
+      #"recipe[sample::resource_attributes]",
     ]
 
     #chef.arguments = '--log_level debug'

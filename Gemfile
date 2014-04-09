@@ -2,5 +2,9 @@ source 'https://rubygems.org'
 
 gem 'berkshelf'
 gem 'thor-foodcritic'
-gem 'test-kitchen'
-gem 'kitchen-vagrant'
+
+group :integration do
+  gem 'strainer', '~> 3.3'
+  gem 'chefspec', '~> 3.1'
+  gem 'travis-lint'
+end
