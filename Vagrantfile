@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "on-failure-berkshelf"
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "Ubuntu-12.04-LTS"
+  config.vm.box = "opscode-ubuntu-12.04"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
