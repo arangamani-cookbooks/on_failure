@@ -80,9 +80,9 @@ Vagrant.configure("2") do |config|
     }
 
     chef.run_list = [
-      #"recipe[sample::default]",
+      "recipe[sample::default]",
       #"recipe[sample::with_exception]",
-      "recipe[sample::with_retries]",
+      #"recipe[sample::with_retries]",
       #"recipe[sample::multiple_blocks]",
       #"recipe[sample::multiple_exceptions]",
     ]
