@@ -69,6 +69,18 @@ end
 In this example, the action will be retried 5 times before the exception is raised. If the action succeeds before all
 retries, we are good and nothing wil be raised.
 
+### Specifying continue
+
+If instead of retrying the first resource after failure, you want to continue execution, specify continue true. By default continue is false and 1 retry will be attempted. retries: & continue: mutually exclude each other; if continue: is false, retries will be attempted (default 1, attention if retries = 0, no execution of the code block will take place); if continue: is true, no retries will be attempted
+
+```ruby
+meal 'breakfast' do
+  on_failure(continue: true) { notify :eat, 'meal[lunch]' }
+end
+```
+
+In this example, the action will not be retried, but execution passes to the resource notified.
+
 ### Specifying multiple exceptions
 
 Multiple exceptions classes can be specified to be caught. You can also include the options such as retries along with

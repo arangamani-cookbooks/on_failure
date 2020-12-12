@@ -17,6 +17,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# update 12dec2020, bartvff: added continue: parameter to on_failure handler
 
 module OnFailureDoThis
   def run_action_rescued(action = nil)
@@ -26,13 +27,20 @@ module OnFailureDoThis
     Chef::Log.info "#{new_resource.resource_name}[#{new_resource.name}] failed with: #{e.inspect}"
     if new_resource.instance_variable_defined?('@on_failure_handlers'.to_sym)
       new_resource.on_failure_handlers.each do |on_failure_struct|
-        if on_failure_struct.options[:retries] > 0 &&
+        if !on_failure_struct.options[:continue] &&
+          on_failure_struct.options[:retries] > 0 &&
           (on_failure_struct.exceptions.any? { |klass| e.is_a?(klass) } || on_failure_struct.exceptions.empty?)
           on_failure_struct.options[:retries] -= 1
           Chef::Log.debug "Executing the block"
           instance_exec(new_resource, &on_failure_struct.block)
           Chef::Log.debug "Retrying the resource action"
           run_action_rescued(action)
+          return
+        end
+        if on_failure_struct.options[:continue] &&
+          (on_failure_struct.exceptions.any? { |klass| e.is_a?(klass) } || on_failure_struct.exceptions.empty?)
+          Chef::Log.debug "Executing the block, *not* retrying the resource action"
+          instance_exec(new_resource, &on_failure_struct.block)
           return
         end
       end
@@ -64,7 +72,7 @@ class Chef::Resource
   attr_accessor :on_failure_handlers
 
   def on_failure(*args, &block)
-    options = {:retries => 1}
+    options = {:retries => 1, :continue => false}
     exceptions = []
     args.each do |arg|
       exceptions << arg if arg.is_a?(Class)
